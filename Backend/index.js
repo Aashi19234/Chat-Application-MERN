@@ -6,6 +6,7 @@ import messageroute from "./routes/message.route.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { app, server } from "./SocketIO/server.js";
+import path from "path";
 
 
 dotenv.config();
@@ -25,7 +26,15 @@ try {
 app.use("/api/user",userRoute);
 app.use("/api/message",messageroute);
 
-
+// code for deployment
+if(process.env.NODE_ENV==="production"){
+const dirpath=path.resolve();
+app.use(express.static("./Frontend/dist"));
+app.get("*", (req,res)=>{
+  res.sendFile(path.resolve(dirpath, "./Frotend/dist", "index.html"));
+  
+})
+}
 
 
 
